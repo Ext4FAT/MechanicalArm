@@ -11,6 +11,7 @@ list<Point3D> readCmd(std::string filename = "cmd.csv")
 
 void moveCmd(Dobot &arm, string recv)
 {
+	//Point3D bias = { 0, 0, -8.0f };
 	Point3D pt;
 	std::stringstream ss;
 	ss << recv;
@@ -18,6 +19,10 @@ void moveCmd(Dobot &arm, string recv)
 	MESSAGE_INFO("MOVE TO " << pt);
 
 	//arm.gripperCtrl(true, true);
+
+	Point3D current = arm.getPosition();
+	current.z = 60.0f;
+	arm.gotoPoint(current, true);
 	arm.gotoPoint(pt, true);
 	//arm.grasp(1.1f);
 	//arm.slient(true);
@@ -34,6 +39,18 @@ int parseCommand(Dobot &arm, string recv)
 	else if (recv == "change"){
 		arm.changeGripper();
 		return 'c';
+	}
+	else if (recv == "up"){
+		arm.UP();
+		arm.waitForSeconds(1.0f);
+		arm.STOP();
+		return 'u';
+	}
+	else if (recv == "down"){
+		arm.DOWN();
+		arm.waitForSeconds(1.0f);
+		arm.STOP();
+		return 'd';
 	}
 	else if (recv == "quit") {
 		return 'q';
@@ -53,7 +70,15 @@ int test()
 	arm.connect();	
 	if (!arm.isConnected())
 		return -1;
-	
+
+	//while (1){
+	//	arm.DOWN();
+	//	arm.waitForSeconds(1.2f);
+	//	arm.UP();
+	//	arm.waitForSeconds(1.2f);
+	//}
+
+
 	// wait for cmd
 	arm._connectSocket();
 	while (true){

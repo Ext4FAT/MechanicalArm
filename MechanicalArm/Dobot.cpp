@@ -290,6 +290,7 @@ void Dobot::_jog(int i)
 	JOGCmd jogCmd;
 	jogCmd.isJoint = _JOGMODE_;
 	jogCmd.cmd = i;
+	//SetJOGCmd(&jogCmd, true, NULL);
 	SetJOGCmd(&jogCmd, false, NULL);
 }
 
