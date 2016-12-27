@@ -23,9 +23,8 @@ void moveCmd(Dobot &arm, string recv)
 	Point3D current = arm.getPosition();
 	current.z = 60.0f;
 	arm.gotoPoint(current, true);
+	pt.z = 65.f;
 	arm.gotoPoint(pt, true);
-	//arm.grasp(1.1f);
-	//arm.slient(true);
 }
 
 int parseCommand(Dobot &arm, string recv)
@@ -52,11 +51,19 @@ int parseCommand(Dobot &arm, string recv)
 		arm.STOP();
 		return 'd';
 	}
+	else if (recv == "grasp"){
+		arm.grasp(1.0f);
+		arm.slient();
+		return 'g';
+	}
 	else if (recv == "quit") {
 		return 'q';
 	}
 	else {
 		moveCmd(arm, recv);
+		arm.grasp(1.0f);
+		arm.slient();
+		arm.waitForSeconds(5.0f);
 		return 'm';
 	}
 }

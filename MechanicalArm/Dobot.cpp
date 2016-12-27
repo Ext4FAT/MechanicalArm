@@ -393,9 +393,15 @@ Point3D Dobot::getPosition()
 
 void Dobot::grasp(float seconds)
 {
+	// open gripper
+	Point3D md = { 0, 0, -20.0f };
+	gripperCtrl(true, true);
+	// go there
+	gotoPoint(getPosition() + md, true);
+	// grasp
 	waitForSeconds(seconds, true);
 	gripperCtrl(false, true);
-	waitForSeconds(seconds, true);
-	Point3D bias = { 0, 0, 60.0f };
+	// up
+	Point3D bias = { 0, 0, 30.0f };
 	gotoPoint(getPosition() + bias, true);
 }
