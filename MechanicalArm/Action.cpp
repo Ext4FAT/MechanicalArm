@@ -8,6 +8,7 @@ list<Point3D> readCmd(std::string filename = "cmd.csv")
 	return li;
 }
 
+bool grasped = false;
 
 void moveCmd(Dobot &arm, string recv)
 {
@@ -36,6 +37,7 @@ int parseCommand(Dobot &arm, string recv)
 		return 'h';
 	}
 	else if (recv == "change"){
+		grasped = false;
 		arm.changeGripper();
 		return 'c';
 	}
@@ -60,10 +62,13 @@ int parseCommand(Dobot &arm, string recv)
 		return 'q';
 	}
 	else {
-		moveCmd(arm, recv);
-		arm.grasp(1.0f);
-		arm.slient();
-		arm.waitForSeconds(5.0f);
+		//if (!grasped){
+			arm.gripperCtrl(true, true);
+			moveCmd(arm, recv);
+			arm.grasp(1.0f);
+			arm.slient();
+			grasped = true;
+		//}
 		return 'm';
 	}
 }
