@@ -80,17 +80,10 @@ int test()
 {
 	Dobot arm(origin);
 	arm.connect();	
-	if (!arm.isConnected())
+	if (!arm.isConnected()){
+		MessageBox(NULL, TEXT("Please connect DOBOT to the computer!"), TEXT("OK"), MB_OK);
 		return -1;
-
-	//while (1){
-	//	arm.DOWN();
-	//	arm.waitForSeconds(1.2f);
-	//	arm.UP();
-	//	arm.waitForSeconds(1.2f);
-	//}
-
-
+	}
 	// wait for cmd
 	arm._connectSocket();
 	while (true){
@@ -98,7 +91,6 @@ int test()
 		parseCommand(arm, recv);
 	}
 	arm._closeSocket();
-	
 	return 0;
 }
 
